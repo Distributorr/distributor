@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            user-select: none; /* verhindert das Markieren von Text */
+        }
+        .search-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .search-box input[type="text"] {
+            padding: 10px;
+            width: 400px;
+            font-size: 18px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            outline: none;
+        }
+        .search-box input[type="text"]:focus {
+            box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
+        }
+        .search-box button {
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-right: 5px;
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+        .search-box button:hover {
+            box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
+        }
+        .cursor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-image: url; /* fügt eine Textur für den Mauszeiger hinzu */
+        }
+    </style>
+</head>
+<body>
+    <div class="search-box">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google Logo">
+        <div id="search-container">
+            <form id="search-form" action="https://www.google.com/search" method="get">
+                <input type="text" id="search-input" name="q" placeholder="Search Google or type a URL" disabled>
+                <div id="button-container">
+                    <button type="submit" id="search-button" disabled>Google Search</button>
+                    <button type="button" id="lucky-button" disabled>I'm Feeling Lucky</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+    <div class="cursor" id="cursor"></div>
+
+    <script>
+        var text = 'Dont you have something better to do?';
+        var i = 0;
+        var speed = 100; // Zeit in Millisekunden
+        var cursor = document.getElementById('cursor'); // holt sich den Mauszeiger
+        var searchButton = document.getElementById('search-button'); // holt sich den Suchen-Button
+        var buttonContainer = document.getElementById('button-container'); // holt sich den Button-Container
+        var clickSound = new Audio; // erstellt ein Audio-Objekt mit einem Klickgeräusch
+
+        function typeWriter() {
+            if (i < text.length) {
+                document.getElementById('search-input').value += text.charAt(i);
+                i++;
+                var rand = Math.floor(Math.random() * (300 - 50 + 1)) + 50; // erzeugt eine zufällige Zahl zwischen 300 und 50
+                setTimeout(typeWriter, rand);
+            } else {
+                document.getElementById('search-input').disabled = false; // aktiviert das Sucheingabefeld
+                document.getElementById('search-button').disabled = false; // aktiviert den Suchen-Button
+                document.getElementById('lucky-button').disabled = false; // aktiviert den Glück-Button
+                moveCursor(); // bewegt den Mauszeiger zum Suchen-Button
+            }
+        }
+
+        function moveCursor() {
+            var x = searchButton.offsetLeft + buttonContainer.offsetLeft + searchButton.offsetWidth / 2; // berechnet die x-Position des Suchen-Buttons
+            var y = searchButton.offsetTop + buttonContainer.offsetTop + searchButton.offsetHeight / 2; // berechnet die y-Position des Suchen-Buttons
+            cursor.style.transition = 'all 1s'; // fügt eine Übergangseffekt hinzu
+            cursor.style.left = x + 'px'; // setzt die linke Position des Mauszeigers
+            cursor.style.top = y + 'px'; // setzt die obere Position des Mauszeigers
+            setTimeout(clickButton, 1000); // wartet eine Sekunde und klickt dann auf den Button
+        }
+
+        function clickButton() {
+            clickSound.play(); // spielt das Klickgeräusch ab
+            searchButton.click(); // simuliert einen Klick auf den Suchen-Button
+        }
+
+        function preventScreenshot(e) {
+            e.preventDefault(); // verhindert die Standardaktion des Events
+        }
+
+        document.addEventListener('keydown', preventScreenshot); // fügt einen Event-Listener hinzu, der das Drücken von Tasten verhindert
+        document.addEventListener('contextmenu', preventScreenshot); // fügt einen Event-Listener hinzu, der das Öffnen des Kontextmenüs verhindert
+
+        typeWriter();
+    </script>
+</body>
+</html>
